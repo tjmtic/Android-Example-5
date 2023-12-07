@@ -13,9 +13,11 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.material3.Button
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -57,7 +59,7 @@ class MainActivity : ComponentActivity() {
                     when(uiState){
                         is MainViewModelUiState.TitleScreen -> { TitleScreen { mainViewModel.goToNameScreen() }
                         }
-                        is MainViewModelUiState.NameScreen -> { NameScreen() }
+                        is MainViewModelUiState.NameScreen -> { NameScreen({}) }
                         is MainViewModelUiState.GameScreen -> {
                             GameScreen(state.tiles) { index -> mainViewModel.selectTile(index) }
                         }
@@ -88,8 +90,18 @@ fun TitleScreen(onClick: () -> Unit ){
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun NameScreen(){
+fun NameScreen(onClick: () -> Unit){
+
+    Column{
+        TextField(value="Tic Tac Toe", onValueChange = {})
+        TextField(value="Tic Tac Toe", onValueChange = {} )
+        Button( modifier = Modifier
+            .weight(16F), onClick = {onClick()}, content = {
+            Text(text="Play")
+        })
+    }
 
 
 }
