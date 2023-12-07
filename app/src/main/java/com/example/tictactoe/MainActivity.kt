@@ -29,7 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import com.example.tictactoe.ui.theme.MyApplicationFoxTestTheme
+import com.example.tictactoe.ui.theme.TicTacToeTheme
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
@@ -47,7 +47,7 @@ class MainActivity : ComponentActivity() {
         }
 
         setContent {
-            MyApplicationFoxTestTheme {
+            TicTacToeTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
@@ -146,7 +146,7 @@ fun PreviewTitleScreen(){
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
-    MyApplicationFoxTestTheme {
+    TicTacToeTheme {
         Greeting("Android")
     }
 }
