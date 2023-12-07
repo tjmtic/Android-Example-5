@@ -1,2 +1,3 @@
-# Android-Example-5
+# Modern Android Development - Android Architecture Components
+# TicTacToe Example
  
