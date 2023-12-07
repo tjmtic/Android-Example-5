@@ -23,3 +23,9 @@ jobs:
       run: chmod +x gradlew
     - name: Build with Gradle
       run: ./gradlew build
+
+    - name: Upload AAB
+      uses: actions/upload-artifact@v2
+      with:
+        name: app-release
+        path: app/build/outputs/bundle/release/app-release.aab
