@@ -57,12 +57,11 @@ class MainActivity : ComponentActivity() {
                     val state by mainViewModel.state.collectAsState()
 
                     when(uiState){
-                        is MainViewModelUiState.TitleScreen -> { TitleScreen { mainViewModel.goToNameScreen() }
-                        }
-                        is MainViewModelUiState.NameScreen -> { NameScreen({}) }
-                        is MainViewModelUiState.GameScreen -> {
-                            GameScreen(state.tiles) { index -> mainViewModel.selectTile(index) }
-                        }
+                        is MainViewModelUiState.TitleScreen -> { TitleScreen { mainViewModel.goToNameScreen() } }
+                        is MainViewModelUiState.NameScreen -> { NameScreen(state.nameOne, {name -> mainViewModel.updateNameOne(name)},
+                                                                            state.nameTwo, {name -> mainViewModel.updateNameTwo(name)},
+                                                                            { mainViewModel.goToGameScreen() }) }
+                        is MainViewModelUiState.GameScreen -> { GameScreen(state.tiles) { index -> mainViewModel.selectTile(index) } }
                     }
                 }
             }
@@ -82,9 +81,8 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
 fun TitleScreen(onClick: () -> Unit ){
     Column{
         Text(text="Tic Tac Toe")
-        Button( modifier = Modifier
-            .height(100.dp)
-            .weight(16F), onClick = {onClick()}, content = {
+        Button( modifier = Modifier,
+            onClick = {onClick()}, content = {
             Text(text="Play")
         })
     }
@@ -92,13 +90,13 @@ fun TitleScreen(onClick: () -> Unit ){
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun NameScreen(onClick: () -> Unit){
+fun NameScreen(value1: String, onValue1Change: (String) -> Unit, value2: String, onValue2Change: (String) -> Unit, onClick: () -> Unit){
 
     Column{
-        TextField(value="Tic Tac Toe", onValueChange = {})
-        TextField(value="Tic Tac Toe", onValueChange = {} )
-        Button( modifier = Modifier
-            .weight(16F), onClick = {onClick()}, content = {
+        TextField(value= value1, onValueChange = { onValue1Change(it)} )
+        TextField(value= value2, onValueChange = { onValue2Change(it)} )
+        Button( modifier = Modifier,
+            onClick = { onClick()}, content = {
             Text(text="Play")
         })
     }
@@ -107,10 +105,10 @@ fun NameScreen(onClick: () -> Unit){
 }
 
 @Composable
-fun Tile(value: Int, onClick: () -> Unit){
+fun Tile(tile: TicTacToeTile, onClick: () -> Unit){
 
     Box(Modifier.clickable { onClick() }) {
-        when (value) {
+        when (tile.value) {
             1 -> {
                 Text("X")
             }
@@ -127,7 +125,7 @@ fun Tile(value: Int, onClick: () -> Unit){
 }
 
 @Composable
-fun GameScreen(board: List<Int>, onClick: (Int) -> Unit){
+fun GameScreen(board: List<TicTacToeTile>, onClick: (Int) -> Unit){
 
     LazyVerticalGrid(columns= GridCells.Fixed(3)) {
         itemsIndexed(board) { index, item ->
@@ -149,4 +147,12 @@ fun GreetingPreview() {
     TicTacToeTheme {
         Greeting("Android")
     }
+}
+
+@Preview
+@Composable
+fun GameScreenPreview(){
+    GameScreen(board = mutableListOf<TicTacToeTile>().apply{ repeat(9){ this.add(
+        TicTacToeTile()
+    )}}, onClick = {})
 }
