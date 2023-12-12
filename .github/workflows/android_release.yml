@@ -21,6 +21,9 @@ jobs:
     - name: Decode Keystore File
       run: echo "${{ secrets.KEYSTORE }}" | base64 -d > app/my-release-key.keystore
 
+    - name: List files in the app directory
+      run: ls -la app/
+
     - name: Build Release APK
       run: ./gradlew assembleRelease -Pandroid.injected.signing.store.file=app/my-release-key.keystore -Pandroid.injected.signing.keystore.password=${{ secrets.KEYSTORE_PASSWORD }} -Pandroid.injected.signing.key.alias=${{ secrets.ALIAS }} -Pandroid.injected.signing.key.password=${{ secrets.KEY_PASSWORD }}
       env:
