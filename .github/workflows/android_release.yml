@@ -27,6 +27,8 @@ jobs:
         pwd
         echo "Directory contents:"
         ls -la
+        echo "Directory contents:"
+        ls -la app/
 
     - name: Build Release APK
       run: ./gradlew assembleRelease -Pandroid.injected.signing.store.file=app/my-release-key.keystore -Pandroid.injected.signing.keystore.password=${{ secrets.KEYSTORE_PASSWORD }} -Pandroid.injected.signing.key.alias=${{ secrets.ALIAS }} -Pandroid.injected.signing.key.password=${{ secrets.KEY_PASSWORD }}
