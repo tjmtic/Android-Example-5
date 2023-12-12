@@ -22,7 +22,7 @@ jobs:
       run: echo "${{ secrets.KEYSTORE }}" | base64 -d > app/my-release-key.keystore
 
     - name: Build Release APK
-      run: ./gradlew assembleRelease
+      run: ./gradlew assembleRelease -Pandroid.injected.signing.store.file=app/my-release-key.keystore -Pandroid.injected.signing.store.password=${{ secrets.KEYSTORE_PASSWORD }} -Pandroid.injected.signing.key.alias=${{ secrets.ALIAS }} -Pandroid.injected.signing.key.password=${{ secrets.KEY_PASSWORD }}
       env:
         KEYSTORE_PATH: ${{ secrets.KEYSTORE_PATH }}
         KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
