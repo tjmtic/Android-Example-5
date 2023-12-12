@@ -22,9 +22,13 @@ jobs:
       run: echo "${{ secrets.KEYSTORE }}" | base64 -d > app/my-release-key.keystore
 
     - name: Build Release APK
-      run: |
-        ./gradlew assembleRelease -Pandroid.injected.signing.store.file=my-release-key.keystore -Pandroid.injected.signing.store.password=${{ secrets.KEYSTORE_PASSWORD }} -Pandroid.injected.signing.key.alias=${{ secrets.ALIAS }} -Pandroid.injected.signing.key.password=${{ secrets.KEY_PASSWORD }}
-      
+      run: ./gradlew assembleRelease
+      env:
+        KEYSTORE_PATH: ${{ secrets.KEYSTORE_PATH }}
+        KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+        KEY_ALIAS: ${{ secrets.ALIAS }}
+        KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+
     - name: Upload Release APK
       uses: actions/upload-artifact@v2
       with:

@@ -3,20 +3,3 @@ plugins {
     id("com.android.application") version "8.1.1" apply false
     id("org.jetbrains.kotlin.android") version "1.8.10" apply false
 }
-
-android {
-    signingConfigs {
-        release {
-            storeFile file('../app/my-release-key.keystore')
-            storePassword 'KEYSTORE_PASSWORD'
-            keyAlias 'KEY_ALIAS'
-            keyPassword 'KEY_PASSWORD'
-        }
-    }
-
-buildTypes {
-        release {
-            signingConfig signingConfigs.release
-        }
-    }
-}
