@@ -19,7 +19,7 @@ jobs:
         distribution: 'temurin'
 
     - name: Decode Keystore File
-      run: echo "${{ secrets.KEYSTORE }}" | base64 -d > app/my-release-key.keystore
+      run: echo "${{ secrets.KEYSTORE }}" | base64 -d > ${{ secrets.KEYSTORE_PATH }}
 
     - name: List files in the app directory
       run: |
@@ -31,18 +31,18 @@ jobs:
         ls -la app/
 
     - name: Set permissions for the Keystore
-      run: chmod 644 app/my-release-key.keystore
+      run: chmod 644 ${{ secrets.KEYSTORE_PATH }}
 
     - name: Check Keystore File
       run: |
-        if [ -f app/my-release-key.keystore ]; then
+        if [ -f ${{ secrets.KEYSTORE_PATH }} ]; then
           echo "Keystore file found."
         else
           echo "Keystore file not found."
         fi
 
     - name: Build Release APK
-      run: ./gradlew assembleRelease -Pandroid.injected.signing.store.file=app/my-release-key.keystore -Pandroid.injected.signing.keystore.password=${{ secrets.KEYSTORE_PASSWORD }} -Pandroid.injected.signing.key.alias=${{ secrets.ALIAS }} -Pandroid.injected.signing.key.password=${{ secrets.KEY_PASSWORD }}
+      run: ./gradlew assembleRelease -Pandroid.injected.signing.store.file=${{ secrets.KEYSTORE_PATH }} -Pandroid.injected.signing.keystore.password=${{ secrets.KEYSTORE_PASSWORD }} -Pandroid.injected.signing.key.alias=${{ secrets.ALIAS }} -Pandroid.injected.signing.key.password=${{ secrets.KEY_PASSWORD }}
       env:
         KEYSTORE_PATH: ${{ secrets.KEYSTORE_PATH }}
         KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
