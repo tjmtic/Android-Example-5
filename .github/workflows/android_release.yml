@@ -46,7 +46,11 @@ jobs:
 
     - name: Build Release APK
       run: ./gradlew assembleRelease -Pandroid.injected.signing.store.file=${{ secrets.KEYSTORE_PATH }} -Pandroid.injected.signing.keystore.password=${{ secrets.KEYSTORE_PASSWORD }} -Pandroid.injected.signing.key.alias=${{ secrets.ALIAS }} -Pandroid.injected.signing.key.password=${{ secrets.KEY_PASSWORD }}
-    
+      env:
+           KEYSTORE_PATH: ${{ secrets.KEYSTORE_PATH }}
+           KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+           KEY_ALIAS: ${{ secrets.ALIAS }}
+           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
 
     - name: Upload Release APK
       uses: actions/upload-artifact@v2
