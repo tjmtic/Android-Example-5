@@ -42,15 +42,11 @@ jobs:
         fi
 
     - name: Check Keystore File
-      run: keytool -list -v -keystore app/my-release-key.keystore -storepass ${{ secrets.KEYSTORE_PASSWORD }}
+      run: keytool -list -v -keystore ${{ secrets.KEYSTORE_PATH }} -storepass ${{ secrets.KEYSTORE_PASSWORD }}
 
     - name: Build Release APK
       run: ./gradlew assembleRelease -Pandroid.injected.signing.store.file=${{ secrets.KEYSTORE_PATH }} -Pandroid.injected.signing.keystore.password=${{ secrets.KEYSTORE_PASSWORD }} -Pandroid.injected.signing.key.alias=${{ secrets.ALIAS }} -Pandroid.injected.signing.key.password=${{ secrets.KEY_PASSWORD }}
-      env:
-        KEYSTORE_PATH: ${{ secrets.KEYSTORE_PATH }}
-        KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
-        KEY_ALIAS: ${{ secrets.ALIAS }}
-        KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+    
 
     - name: Upload Release APK
       uses: actions/upload-artifact@v2
