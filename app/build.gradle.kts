@@ -34,10 +34,10 @@ android {
 
     signingConfigs {
         create("release") {
-            //storeFile = file(System.getenv("KEYSTORE_PATH") ?: localProperties.getProperty("keystorePath"))
-            //storePassword = System.getenv("KEYSTORE_PASSWORD")?: localProperties.getProperty("keystorePassword")
-            //keyAlias = System.getenv("KEY_ALIAS")?: localProperties.getProperty("keyAlias")
-            //keyPassword = System.getenv("KEY_PASSWORD")?: localProperties.getProperty("keyPassword")
+            storeFile = file(System.getenv("KEYSTORE_PATH") ?: localProperties.getProperty("keystorePath"))
+            storePassword = System.getenv("KEYSTORE_PASSWORD")?: localProperties.getProperty("keystorePassword")
+            keyAlias = System.getenv("KEY_ALIAS")?: localProperties.getProperty("keyAlias")
+            keyPassword = System.getenv("KEY_PASSWORD")?: localProperties.getProperty("keyPassword")
         }
     }
 
