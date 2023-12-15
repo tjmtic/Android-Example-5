@@ -30,6 +30,17 @@ jobs:
         echo "Directory contents:"
         ls -la app/
 
+    - name: Set permissions for the Keystore
+      run: chmod 644 app/my-release-key.keystore
+
+    - name: Check Keystore File
+      run: |
+        if [ -f app/my-release-key.keystore ]; then
+          echo "Keystore file found."
+        else
+          echo "Keystore file not found."
+        fi
+
     - name: Build Release APK
       run: ./gradlew assembleRelease -Pandroid.injected.signing.store.file=app/my-release-key.keystore -Pandroid.injected.signing.keystore.password=${{ secrets.KEYSTORE_PASSWORD }} -Pandroid.injected.signing.key.alias=${{ secrets.ALIAS }} -Pandroid.injected.signing.key.password=${{ secrets.KEY_PASSWORD }}
       env:
