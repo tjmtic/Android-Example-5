@@ -27,7 +27,7 @@ jobs:
         pwd
         echo "Directory contents:"
         ls -la
-        echo "Directory contents:"
+        echo "Directory contents /app/:"
         ls -la app/
 
     - name: Set permissions for the Keystore
