@@ -31,18 +31,18 @@ jobs:
         ls -la app/
 
     - name: Set permissions for the Keystore
-      run: chmod 644 ${{ secrets.KEYSTORE_PATH }}
+      run: chmod 644 app/${{ secrets.KEYSTORE_PATH }}
 
     - name: Check Keystore File
       run: |
-        if [ -f ${{ secrets.KEYSTORE_PATH }} ]; then
+        if [ -f app/${{ secrets.KEYSTORE_PATH }} ]; then
           echo "Keystore file found."
         else
           echo "Keystore file not found."
         fi
 
     - name: Check Keystore File
-      run: keytool -list -v -keystore ${{ secrets.KEYSTORE_PATH }} -storepass ${{ secrets.KEYSTORE_PASSWORD }}
+      run: keytool -list -v -keystore app/${{ secrets.KEYSTORE_PATH }} -storepass ${{ secrets.KEYSTORE_PASSWORD }}
 
     - name: Build Release APK
       run: ./gradlew assembleRelease -Pandroid.injected.signing.store.file=${{ secrets.KEYSTORE_PATH }} -Pandroid.injected.signing.keystore.password=${{ secrets.KEYSTORE_PASSWORD }} -Pandroid.injected.signing.key.alias=${{ secrets.ALIAS }} -Pandroid.injected.signing.key.password=${{ secrets.KEY_PASSWORD }}
