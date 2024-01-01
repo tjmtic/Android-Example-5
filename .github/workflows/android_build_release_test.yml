@@ -1,0 +1,62 @@
+name: Build and Release Android App
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up JDK 17
+      uses: actions/setup-java@v2
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+
+    - name: Decode Keystore File
+      run: echo "${{ secrets.KEYSTORE }}" | base64 -d > ${{ secrets.ANDROID_BASE_PATH }}${{ secrets.KEYSTORE_PATH }}
+
+    - name: List files in the app directory
+      run: |
+        echo "Current directory:"
+        pwd
+        echo "Directory contents:"
+        ls -la
+        echo "Directory contents Android Base Path:"
+        ls -la ${{ secrets.ANDROID_BASE_PATH }}
+
+    - name: Set permissions for the Keystore
+      run: chmod 644 ${{ secrets.ANDROID_BASE_PATH }}${{ secrets.KEYSTORE_PATH }}
+
+    - name: Check Keystore File
+      run: |
+        if [ -f ${{ secrets.ANDROID_BASE_PATH }}${{ secrets.KEYSTORE_PATH }} ]; then
+          echo "Keystore file found."
+        else
+          echo "Keystore file not found."
+        fi
+
+    - name: Check Keystore File
+      run: keytool -list -v -keystore ${{ secrets.ANDROID_BASE_PATH }}${{ secrets.KEYSTORE_PATH }} -storepass ${{ secrets.KEYSTORE_PASSWORD }}
+
+    - name: Build Release APK
+      run: ./gradlew assembleRelease -Pandroid.injected.signing.store.file=${{ secrets.KEYSTORE_PATH }} -Pandroid.injected.signing.keystore.password=${{ secrets.KEYSTORE_PASSWORD }} -Pandroid.injected.signing.key.alias=${{ secrets.ALIAS }} -Pandroid.injected.signing.key.password=${{ secrets.KEY_PASSWORD }}
+      env:
+           KEYSTORE_PATH: ${{ secrets.KEYSTORE_PATH }}
+           KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+           KEY_ALIAS: ${{ secrets.ALIAS }}
+           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+
+    - name: Run Tests
+      run: ./gradlew test
+
+    - name: Upload Release APK
+      uses: actions/upload-artifact@v2
+      with:
+        name: release-apk
+        path: app/build/outputs/apk/release/app-release.apk
