@@ -14,6 +14,7 @@ if (localPropertiesFile.exists()) {
         localProperties.load(it)
     }
 }
+val myValue : String = localProperties.getProperty("myValue") ?: ""
 
 android {
     namespace = "com.example.tictactoe"
@@ -30,6 +31,7 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+        manifestPlaceholders["GOOGLE_MAPS_API_KEY"] = myValue
     }
 
     signingConfigs {
